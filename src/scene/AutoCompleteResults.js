@@ -19,11 +19,21 @@ const Container = styled.div`
     transform: translateX(-50%);
   }
 `
-const Item = styled.div`
+const Item = styled.a`
+  display: block;
+  text-transform: none;
   width: 100%;
   font-size: 12px;
   padding: 10px;
   box-sizing: border-box;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+
+  &:hover, &:focus {
+    background: #89bdd6;
+    color: #fff;
+  }
 `;
 
 function AutoCompleteResults(props) {
@@ -37,7 +47,11 @@ function AutoCompleteResults(props) {
     <Container>
       {
         suggestions.map((result) => 
-          <Item>{result.title}</Item>
+          <Item 
+            key={result.title}
+            href={result.url}>
+              {result.title}
+          </Item>
         )
       }
       
