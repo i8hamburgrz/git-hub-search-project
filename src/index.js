@@ -2,14 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { Provider } from "react-redux";
-import { createStore } from "redux";
-import middleWare from "./scene/store/middleWare";
-import reducer from "./scene/store/resultsReducer";
+import configureStore from "./store/store";
+
 
 import App from "./scene/App.js";
 
-const store = createStore(reducer, middleWare);
 const rootElement = document.getElementById('root');
+const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
