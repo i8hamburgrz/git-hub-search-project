@@ -46,7 +46,8 @@ const Icon = styled.div`
 function SearchBar(props) {
   const wrapperRef = useRef(null);
   const [isFocus, setFocus] = useState(false);
-  const [searchString, setSearch] = useState('');
+  const [query, setQuery] = useState('');
+  const [displayValue, setDisplay] = useState('');
   const [isInsideAutoComplete, setIsMoving] = useState(false);
 
   // make api call to github after string is set to state
@@ -54,13 +55,13 @@ function SearchBar(props) {
     // using timeout here to wait to make api until user stops typing
     // this will help reduce the amount of unnecessary api calls being made
     const timeout = setTimeout(()=> {
-      searchGitHub(searchString)
+      searchGitHub(query)
     }, 500);
   
     return () => {
       clearTimeout(timeout);
     }
-  }, [searchString]);
+  }, [query]);
   
   const onFocusHandler = () => {
     if(!isFocus) {
@@ -73,7 +74,9 @@ function SearchBar(props) {
   }
 
   const setSearchHandler = (e) => {
-    setSearch(e.target.value);
+    const value = e.target.value;
+    setQuery(value);
+    setDisplay(value);
   }
 
   const searchGitHub = (value) => {
@@ -88,7 +91,7 @@ function SearchBar(props) {
   }
 
   const handleSetSuggestion = (value) => {
-    setSearch(value)
+    setDisplay(value)
   }
 
   return (
@@ -101,7 +104,7 @@ function SearchBar(props) {
           type="text" 
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
-          value={searchString}
+          value={displayValue}
           onChange={setSearchHandler}
           onKeyDown={isSelectingAutoComplete}
         />
