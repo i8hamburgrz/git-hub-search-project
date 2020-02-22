@@ -57,6 +57,7 @@ function AutoCompleteResults(props) {
     suggestions
   };
 
+  // if the position in the array changes, set that value to the input field
   useEffect(() => {
     if( pos >= 0) {
       const currSuggestion = suggestions[pos].title;
@@ -64,10 +65,12 @@ function AutoCompleteResults(props) {
     }
   }, [pos]);
 
+  // reset navigation if suggestions array changes
   useEffect(() => {
     setNavigate(-1)
   }, [suggestions]);
 
+  // add keydown event listener
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
     return () => {
