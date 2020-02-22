@@ -69,13 +69,8 @@ function SearchBar(props) {
   }
 
   const searchGitHub = (value) => {
-    const { getResults, removeResults } = props;
-
-    if(value.length > 0) {
-      getResults(value);
-    } else {
-      removeResults()
-    } 
+    const { getResults } = props;
+    getResults(value);
   }
 
   const isSelectingAutoComplete = (e) => {

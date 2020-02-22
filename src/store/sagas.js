@@ -1,12 +1,19 @@
 import { fork, takeLatest, put, call, take, cancel, select } from 'redux-saga/effects'
-import { GET_RESULTS, REMOVE_RESULTS, addResults } from "../store/searchActions";
+import { GET_RESULTS, REMOVE_RESULTS, addResults, removeResults } from "../store/searchActions";
 import { searchRequest } from "../store/api";
 
 // Generator
 function* fetchData(action) {
   try {
-    const data = yield call(searchRequest, action.payload);
-    yield put(addResults(data))
+    const { payload } = action;
+
+    if (payload.length > 0) {
+      const data = yield call(searchRequest, action.payload);
+      yield put(addResults(data))
+    } else {
+      yield put(removeResults());
+    }
+    
   } catch(e) {
       console.log(e);
   }
@@ -14,15 +21,7 @@ function* fetchData(action) {
 
 // watcher
 function* watchFetchData() {
-  const fetchDataWorker = yield takeLatest(GET_RESULTS, fetchData);
-
-  const action = yield take(['REMOVE_RESULTS'])
-  console.log(action)
-    if (action === REMOVE_RESULTS) {
-      console.log('cancel')
-      yield cancel(fetchDataWorker)
-    }
-     
+  yield takeLatest(GET_RESULTS, fetchData);
 }
 
 // root

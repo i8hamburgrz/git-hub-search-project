@@ -116,14 +116,15 @@ function AutoCompleteResults(props) {
   }
 
 
-  // TODO: on click setSuggestion
+  // TODO: add labels
   return (
     <Container>
       {
         suggestions.map((result, i) => 
           <Item 
+            key={result.title}
             isActive={pos === i}
-            key={result.title}>
+            >
               {result.title}
           </Item>
         )
