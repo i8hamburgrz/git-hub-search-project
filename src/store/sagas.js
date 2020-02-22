@@ -17,6 +17,7 @@ function* watchFetchData() {
   const fetchDataWorker = yield takeLatest(GET_RESULTS, fetchData);
 
   const action = yield take(['REMOVE_RESULTS'])
+  console.log(action)
     if (action === REMOVE_RESULTS) {
       console.log('cancel')
       yield cancel(fetchDataWorker)

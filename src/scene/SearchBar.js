@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { getResults, removeResults} from "../store/searchActions";
 import styled from "styled-components";
@@ -24,14 +24,13 @@ const Search = styled.div`
   display: flex;
   box-shadow: none;
   height: 44px;
-  
-  input {
-    font-size: 16px;
-    outline: none;
-    border: none;
-    padding: 0 20px 0 10px;
-    flex-grow: 1;
-  }
+`
+const InputField = styled.input`
+  font-size: 16px;
+  outline: none;
+  border: none;
+  padding: 0 20px 0 10px;
+  flex-grow: 1;
 `
 const Icon = styled.div`
   display: flex;
@@ -44,15 +43,16 @@ const Icon = styled.div`
 `
 
 function SearchBar(props) {
+  const inputRef = useRef(null);
+  // TODO: add a listner to see if clicked outside of the box, if so hide auto complete. Show auto complete when click inside search box
   const [isFocus, setFocus] = useState(false);
   const [searchString, setSearch] = useState('');
-
-  useEffect(() => {
-    searchGitHub(searchString)
-  }, [searchString]);
+  const [isInsideAutoComplete, setIsMoving] = useState(false);
   
   const onFocusHandler = () => {
-    !isFocus && setFocus(true)
+    if(!isFocus) {
+      setFocus(true);
+    }
   }
   
   const onBlurHandler = () => {
@@ -61,6 +61,7 @@ function SearchBar(props) {
 
   const setSearchHandler = (e) => {
     setSearch(e.target.value);
+    searchGitHub(searchString)
   }
 
   const searchGitHub = (value) => {
@@ -70,30 +71,54 @@ function SearchBar(props) {
       getResults(value);
     } else {
       removeResults()
+    } 
+  }
+
+  const isSelectingAutoComplete = (e) => {
+    if (e.keyCode === 40 && props.hasResults) {
+      setIsMoving(true);
+      inputRef.current.focus()
     }
-    
+  }
+
+  const handleSetSuggestion = (value) => {
+    setSearch(value)
   }
 
   return (
     <Wrapper isFocus={isFocus}>
       <Search>
         <Icon><img src={SearchIcon} /></Icon>
-        <input 
+        <InputField 
           type="text" 
+          ref={inputRef}
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
           value={searchString}
           onChange={setSearchHandler}
-          // onKeyUp={searchGitHub}
+          onKeyDown={isSelectingAutoComplete}
         />
       </Search>
-      <AutoCompleteResults />
+      <AutoCompleteResults 
+        isMoving={isInsideAutoComplete}
+        setSuggestion={handleSetSuggestion}
+        inputRef={inputRef}
+      />
     </Wrapper>
     
  )
 }
 
+function mapStateToProps(state){
+  const { results } = state;
+  const { items } = results;
+
+  return {
+    hasResults: items && items.length > 0
+  }
+}
+
 export default connect(
-  null, 
+  mapStateToProps, 
   { getResults, removeResults }
 )(SearchBar);

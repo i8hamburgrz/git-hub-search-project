@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
@@ -19,37 +19,95 @@ const Container = styled.div`
     transform: translateX(-50%);
   }
 `
-const Item = styled.a`
-  display: block;
-  text-transform: none;
+const Item = styled.div`
   width: 100%;
   font-size: 12px;
   padding: 10px;
   box-sizing: border-box;
   cursor: pointer;
-  text-decoration: none;
   color: #000;
 
   &:hover, &:focus {
     background: #89bdd6;
     color: #fff;
   }
+
+  ${props => {
+    if (props.isActive) {
+      return `
+        background: #89bdd6;
+        color: #fff;
+      `;
+    }
+  }}
 `;
 
 function AutoCompleteResults(props) {
-  const { suggestions } = props;
+  const [pos, setNavigate] = useState(-1);
+  const layoutRef = useRef({
+    pos: -1,
+    isMoving
+  });
+  const { suggestions, isMoving, setSuggestion, inputRef } = props;
+
+  // reference of previous position
+  layoutRef.current = {
+    pos: pos,
+    isMoving,
+    suggestions
+  };
+
+  useEffect(() => {
+    if( pos >= 0) {
+      const currSuggestion = suggestions[pos].title;
+      setSuggestion(currSuggestion);
+    }
+  }, [pos]);
+
+  useEffect(() => {
+    setNavigate(-1)
+  }, [suggestions]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
+
+  const handleKeyPress = (e) => {
+    const _suggestions = layoutRef.current.suggestions;
+    const _isMoving = layoutRef.current.isMoving;
+    const currentPos = layoutRef.current.pos;
+    const isDownKeyPress = e.keyCode === 40;
+    const isUpKeyPress = e.keyCode === 38;
+    const isAtFirstOption = currentPos === 0;
+    const isAtLastOption = currentPos + 1 === _suggestions.length;
+    const isMoveUp = _isMoving && !isAtFirstOption && isUpKeyPress;
+    const isMoveDown = _isMoving && !isAtLastOption && isDownKeyPress;
+
+    // moves up and down the list
+    if (isMoveUp) {
+      setNavigate(currentPos - 1);
+    }
+
+    if (isMoveDown) {
+      setNavigate(currentPos + 1);
+    }
+  }
+
 
   if (!suggestions || suggestions.length === 0) {
-    return null;
+    return false;
   }
-  
+
   return (
     <Container>
       {
-        suggestions.map((result) => 
+        suggestions.map((result, i) => 
           <Item 
-            key={result.title}
-            href={result.url}>
+            isActive={pos === i}
+            key={result.title}>
               {result.title}
           </Item>
         )
@@ -67,7 +125,7 @@ function mapStateToProps(state){
   if (suggestions.length > 0) {
     suggestions = suggestions.map((item) => {
       return {
-        url: item.html_url,
+        // url: item.html_url,
         labels: item.labels,
         title: item.title,
       }

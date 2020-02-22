@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   justify-content: center;
+  min-height: 350px;
 `
 const Title = styled.h1`
   font-size: 30px;
