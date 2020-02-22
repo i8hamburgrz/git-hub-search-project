@@ -1,17 +1,16 @@
-import { fork, takeLatest, put, call, take, cancel, select } from 'redux-saga/effects'
-import { GET_RESULTS, REMOVE_RESULTS, addResults, removeResults } from "../store/searchActions";
-import { searchRequest } from "../store/api";
+import { fork, takeLatest, put, call } from 'redux-saga/effects'
+import { GET_SUGGESTIONS, addSuggestions, removeSuggestions } from "../store/searchActions";
+import { searchSuggestions } from "../store/api";
 
 // Generator
-function* fetchData(action) {
+function* fetchSuggestions(action) {
   try {
     const { payload } = action;
-
     if (payload.length > 0) {
-      const data = yield call(searchRequest, action.payload);
-      yield put(addResults(data))
+      const data = yield call(searchSuggestions, action.payload);
+      yield put(addSuggestions(data))
     } else {
-      yield put(removeResults());
+      yield put(removeSuggestions());
     }
     
   } catch(e) {
@@ -21,7 +20,7 @@ function* fetchData(action) {
 
 // watcher
 function* watchFetchData() {
-  yield takeLatest(GET_RESULTS, fetchData);
+  yield takeLatest(GET_SUGGESTIONS, fetchSuggestions);
 }
 
 // root

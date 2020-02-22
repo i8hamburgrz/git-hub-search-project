@@ -1,20 +1,21 @@
-import { ADD_RESULTS, REMOVE_RESULTS } from "./searchActions";
+import { ADD_SUGGESTIONS, REMOVE_SUGGESTIONS } from "./searchActions";
 
 const initialState = { 
+  suggestions: {},
   results: {}
 };
 
 function results(state = initialState, action) {
   switch(action.type) {
-    case ADD_RESULTS:
+    case ADD_SUGGESTIONS:
       return {
         ...state,
-        results: action.results,
+        suggestions: action.suggestions,
       }
-    case REMOVE_RESULTS:
+    case REMOVE_SUGGESTIONS:
       return {
         ...state,
-        results: {}
+        suggestions: {}
       }
     default:
       return state;

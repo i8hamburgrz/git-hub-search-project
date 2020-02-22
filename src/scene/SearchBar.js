@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import { getResults, removeResults} from "../store/searchActions";
+import { getSuggestions } from "../store/searchActions";
 import styled from "styled-components";
 import AutoCompleteResults from "./AutoCompleteResults";
 import SearchIcon from "../images/search.svg";
@@ -80,8 +80,8 @@ function SearchBar(props) {
   }
 
   const searchGitHub = (value) => {
-    const { getResults } = props;
-    getResults(value);
+    const { getSuggestions } = props;
+    getSuggestions(value);
   }
 
   const isSelectingAutoComplete = (e) => {
@@ -120,8 +120,8 @@ function SearchBar(props) {
 }
 
 function mapStateToProps(state){
-  const { results } = state;
-  const { items } = results;
+  const { suggestions } = state;
+  const { items } = suggestions;
 
   return {
     hasResults: items && items.length > 0
@@ -130,5 +130,5 @@ function mapStateToProps(state){
 
 export default connect(
   mapStateToProps, 
-  { getResults, removeResults }
+  { getSuggestions }
 )(SearchBar);

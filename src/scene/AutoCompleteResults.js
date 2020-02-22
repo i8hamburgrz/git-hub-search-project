@@ -133,14 +133,13 @@ function AutoCompleteResults(props) {
 }
 
 function mapStateToProps(state){
-  const { results } = state;
-  const { items } = results;
-  let suggestions = items ? Object.values(results.items) : [];
+  const { suggestions } = state;
+  const { items } = suggestions;
+  let _suggestions = items ? Object.values(items) : [];
 
-  if (suggestions.length > 0) {
-    suggestions = suggestions.map((item) => {
+  if (_suggestions.length > 0) {
+    _suggestions = _suggestions.map((item) => {
       return {
-        // url: item.html_url,
         labels: item.labels,
         title: item.title,
       }
@@ -148,7 +147,7 @@ function mapStateToProps(state){
   }
 
   return {
-    suggestions
+    suggestions: _suggestions
   }
 }
 
