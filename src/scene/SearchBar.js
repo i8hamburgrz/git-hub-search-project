@@ -17,6 +17,7 @@ const Wrapper = styled.div`
     : `0 1px 1px rgba(0,0,0,0.1)`
   )};
   border-radius: 24px;
+  transition: box-shadow 0.1s ease-in;
 `;
 const Search = styled.div`
   overflow: hidden;
@@ -43,7 +44,7 @@ const Icon = styled.div`
 `
 
 function SearchBar(props) {
-  const inputRef = useRef(null);
+  const wrapperRef = useRef(null);
   const [isFocus, setFocus] = useState(false);
   const [searchString, setSearch] = useState('');
   const [isInsideAutoComplete, setIsMoving] = useState(false);
@@ -76,7 +77,6 @@ function SearchBar(props) {
   const isSelectingAutoComplete = (e) => {
     if (e.keyCode === 40 && props.hasResults) {
       setIsMoving(true);
-      inputRef.current.focus()
     }
   }
 
@@ -85,12 +85,13 @@ function SearchBar(props) {
   }
 
   return (
-    <Wrapper isFocus={isFocus}>
+    <Wrapper
+      ref={wrapperRef}
+      isFocus={isFocus}>
       <Search>
         <Icon><img src={SearchIcon} /></Icon>
         <InputField 
           type="text" 
-          ref={inputRef}
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
           value={searchString}
@@ -101,7 +102,7 @@ function SearchBar(props) {
       <AutoCompleteResults 
         isMoving={isInsideAutoComplete}
         setSuggestion={handleSetSuggestion}
-        inputRef={inputRef}
+        wrapperRef={wrapperRef}
       />
     </Wrapper>
     

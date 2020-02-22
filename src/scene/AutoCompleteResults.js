@@ -43,12 +43,13 @@ const Item = styled.div`
 `;
 
 function AutoCompleteResults(props) {
+  const [isHidden, setHidden] = useState(false);
   const [pos, setNavigate] = useState(-1);
   const layoutRef = useRef({
     pos: -1,
     isMoving
   });
-  const { suggestions, isMoving, setSuggestion, inputRef } = props;
+  const { suggestions, isMoving, setSuggestion, wrapperRef } = props;
 
   // reference of previous position
   layoutRef.current = {
@@ -65,18 +66,28 @@ function AutoCompleteResults(props) {
     }
   }, [pos]);
 
-  // reset navigation if suggestions array changes
+  // reset navigation && unhide if suggestions array changes
   useEffect(() => {
-    setNavigate(-1)
+    setNavigate(-1);
+    setHidden(false);
   }, [suggestions]);
 
-  // add keydown event listener
+  // add event listeners
   useEffect(() => {
+    window.addEventListener('click', handleHideSuggestions);
     window.addEventListener('keydown', handleKeyPress);
     return () => {
+      window.removeEventListener('click', handleHideSuggestions);
       window.removeEventListener('keydown', handleKeyPress);
     };
   }, [handleKeyPress]);
+
+  const handleHideSuggestions = (e) => {
+    const { current } = wrapperRef;
+    if(current && !current.contains(e.target)) {
+      setHidden(true);
+    }
+  }
 
   const handleKeyPress = (e) => {
     const _suggestions = layoutRef.current.suggestions;
@@ -100,10 +111,12 @@ function AutoCompleteResults(props) {
   }
 
 
-  if (!suggestions || suggestions.length === 0) {
+  if (!suggestions || suggestions.length === 0 || isHidden) {
     return false;
   }
 
+
+  // TODO: on click setSuggestion
   return (
     <Container>
       {
