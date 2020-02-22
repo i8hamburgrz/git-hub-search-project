@@ -51,7 +51,15 @@ function SearchBar(props) {
 
   // make api call to github after string is set to state
   useEffect(() => {
-    searchGitHub(searchString);
+    // using timeout here to wait to make api until user stops typing
+    // this will help reduce the amount of unnecessary api calls being made
+    const timeout = setTimeout(()=> {
+      searchGitHub(searchString)
+    }, 500);
+  
+    return () => {
+      clearTimeout(timeout);
+    }
   }, [searchString]);
   
   const onFocusHandler = () => {
