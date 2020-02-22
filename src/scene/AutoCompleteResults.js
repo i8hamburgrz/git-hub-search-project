@@ -28,15 +28,13 @@ const Item = styled.div`
   color: #000;
 
   &:hover, &:focus {
-    background: #89bdd6;
-    color: #fff;
+    background: #f6f8fa;
   }
 
   ${props => {
     if (props.isActive) {
       return `
-        background: #89bdd6;
-        color: #fff;
+        background: #f6f8fa;
       `;
     }
   }}
