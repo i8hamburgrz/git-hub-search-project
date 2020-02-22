@@ -122,7 +122,7 @@ function AutoCompleteResults(props) {
       {
         suggestions.map((result, i) => 
           <Item 
-            key={result.title}
+            key={i}
             isActive={pos === i}
             >
               {result.title}
