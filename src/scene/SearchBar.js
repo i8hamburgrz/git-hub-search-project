@@ -44,7 +44,6 @@ const Icon = styled.div`
 
 function SearchBar(props) {
   const inputRef = useRef(null);
-  // TODO: add a listner to see if clicked outside of the box, if so hide auto complete. Show auto complete when click inside search box
   const [isFocus, setFocus] = useState(false);
   const [searchString, setSearch] = useState('');
   const [isInsideAutoComplete, setIsMoving] = useState(false);
