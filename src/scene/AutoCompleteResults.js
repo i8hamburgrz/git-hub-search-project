@@ -51,7 +51,7 @@ function AutoCompleteResults(props) {
   });
   const { suggestions, isMoving, setSuggestion, wrapperRef } = props;
 
-  // reference of previous position
+  // reference of previous position and props
   layoutRef.current = {
     pos: pos,
     isMoving,

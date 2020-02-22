@@ -48,6 +48,11 @@ function SearchBar(props) {
   const [isFocus, setFocus] = useState(false);
   const [searchString, setSearch] = useState('');
   const [isInsideAutoComplete, setIsMoving] = useState(false);
+
+  // make api call to github after string is set to state
+  useEffect(() => {
+    searchGitHub(searchString);
+  }, [searchString]);
   
   const onFocusHandler = () => {
     if(!isFocus) {
@@ -61,7 +66,6 @@ function SearchBar(props) {
 
   const setSearchHandler = (e) => {
     setSearch(e.target.value);
-    searchGitHub(searchString)
   }
 
   const searchGitHub = (value) => {
