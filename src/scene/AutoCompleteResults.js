@@ -60,7 +60,7 @@ function AutoCompleteResults(props) {
 
   // reference of previous position and props
   layoutRef.current = {
-    pos: pos,
+    pos,
     isMoving,
     suggestions
   };
@@ -68,8 +68,8 @@ function AutoCompleteResults(props) {
   // if the position in the array changes, set that value to the input field
   useEffect(() => {
     if( pos >= 0) {
-      const currSuggestion = suggestions[pos].title;
-      setSuggestion(currSuggestion);
+      const selectedSuggestion = suggestions[pos].title;
+      setSuggestion(selectedSuggestion);
     }
   }, [pos]);
 
@@ -89,6 +89,7 @@ function AutoCompleteResults(props) {
     };
   }, [handleKeyPress]);
 
+
   const handleHideSuggestions = (e) => {
     const { current } = wrapperRef;
     if(current && !current.contains(e.target)) {
@@ -97,23 +98,22 @@ function AutoCompleteResults(props) {
   }
 
   const handleKeyPress = (e) => {
-    const _suggestions = layoutRef.current.suggestions;
-    const _isMoving = layoutRef.current.isMoving;
-    const currentPos = layoutRef.current.pos;
+    const { current } = layoutRef;
+    const { suggestions, isMoving, pos } = current;
     const isDownKeyPress = e.keyCode === 40;
     const isUpKeyPress = e.keyCode === 38;
-    const isAtFirstOption = currentPos === 0;
-    const isAtLastOption = currentPos + 1 === _suggestions.length;
-    const isMoveUp = _isMoving && !isAtFirstOption && isUpKeyPress;
-    const isMoveDown = _isMoving && !isAtLastOption && isDownKeyPress;
+    const isAtFirstOption = pos === 0;
+    const isAtLastOption = pos + 1 === suggestions.length;
+    const isMoveUp = isMoving && !isAtFirstOption && isUpKeyPress;
+    const isMoveDown = isMoving && !isAtLastOption && isDownKeyPress;
 
     // moves up and down the list
     if (isMoveUp) {
-      setNavigate(currentPos - 1);
+      setNavigate(pos - 1);
     }
 
     if (isMoveDown) {
-      setNavigate(currentPos + 1);
+      setNavigate(pos + 1);
     }
   }
 
