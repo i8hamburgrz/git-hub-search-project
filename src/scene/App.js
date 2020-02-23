@@ -11,6 +11,8 @@ const Wrapper = styled.div`
   margin: 30px auto 0;
   justify-content: flex-start;
   min-height: 400px;
+  padding: 10px 0;
+  box-sizing: border-box;
 
   @media (min-width: 767px) {
     margin-top: 0;
