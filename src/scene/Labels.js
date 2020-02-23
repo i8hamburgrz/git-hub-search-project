@@ -16,7 +16,7 @@ const Label = styled.div`
   margin: 3px 3px 0 0;
 `
 // gets the text color based on background contrast
-function getContrastYIQ(hexcolor){
+function getTextColor(hexcolor){
   hexcolor = hexcolor.replace("#", "");
   const r = parseInt(hexcolor.substr(0,2),16);
   const g = parseInt(hexcolor.substr(2,2),16);
@@ -35,7 +35,7 @@ function Labels(props) {
         <Label 
           key={label.id}
           style={{
-            color: getContrastYIQ(label.color),
+            color: getTextColor(label.color),
             background: `#${label.color}`
           }}>
           {label.name}
