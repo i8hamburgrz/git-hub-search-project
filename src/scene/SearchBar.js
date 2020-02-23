@@ -108,6 +108,7 @@ function SearchBar(props) {
           value={displayValue}
           onChange={setSearchHandler}
           onKeyDown={isSelectingAutoComplete}
+          maxLength={256}
         />
       </Search>
       <AutoCompleteResults 
