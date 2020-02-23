@@ -30,7 +30,6 @@ function* fetchSuggestions(action) {
 
 function* fetchResults(action) {
   try {
-    debugger
     const { payload } = action;
     const response = yield call(searchIssues, payload);
 

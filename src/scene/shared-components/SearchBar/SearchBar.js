@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { withRouter } from 'react-router';
 import { connect } from "react-redux";
+import queryString from "query-string";
 import { getSuggestions, getResults } from "../../../store/searchActions";
 import styled from "styled-components";
 import AutoCompleteResults from "./components/AutoCompleteResults";
@@ -53,14 +55,30 @@ function SearchBar(props) {
   const [isFocus, setFocus] = useState(false);
   const [query, setQuery] = useState('');
   const [displayValue, setDisplay] = useState('');
+  const [isAutoCompleteVisible, setACVisibilty] = useState(false);
   const [isInsideAutoComplete, setIsMoving] = useState(false);
   const layoutRef = useRef({
     query: displayValue
   });
 
+  // needs this as a reference for event handlers
   layoutRef.current = {
     query: displayValue
   };
+
+  // on mount, check if we are on search page
+  useEffect(() => {
+    const { location, getResults } = props;
+
+    if (location.pathname.includes('search')) {
+      if(location.search.length > 0) {
+        const query = queryString.parse(location.search);
+        setDisplay(query.q);
+        getResults(query.q);
+      }
+    }
+    
+  }, [])
 
   // make api call to github after string is set to state
   useEffect(() => {
@@ -69,26 +87,27 @@ function SearchBar(props) {
     const timeout = setTimeout(()=> {
       searchGitHub(query)
     }, 300);
+    
   
     return () => {
       clearTimeout(timeout);
+      layoutRef.current.isMounted = true;
     }
   }, [query]);
 
   // add event listener
   useEffect(() => {
-    window.addEventListener('keydown', handleSearch);
+    window.addEventListener('keydown', handleSearchOnEnter);
     return () => {
-      window.removeEventListener('keydown', handleSearch);
+      window.removeEventListener('keydown', handleSearchOnEnter);
     };
-  }, [handleSearch]);
+  }, [handleSearchOnEnter]);
 
-  const handleSearch = (e) => {
-    if(e && e.keyCode === 13) {
-      const { getResults } = props;
+  const handleSearchOnEnter = (e) => {
+    if(e && e.keyCode === 13 && !isInsideAutoComplete) {
       const { current } = layoutRef;
-
-      getResults(current.query);
+      const query = current.query.split(' ').join('+');
+      props.history.push(`/search?q=${query}`)
     }
   }
   
@@ -106,6 +125,7 @@ function SearchBar(props) {
     const value = e.target.value;
     setQuery(value);
     setDisplay(value);
+    setACVisibilty(true);
   }
 
   const searchGitHub = (value) => {
@@ -140,12 +160,13 @@ function SearchBar(props) {
           maxLength={256}
         />
       </Search>
-      <AutoCompleteResults 
-        isMoving={isInsideAutoComplete}
-        setSuggestion={handleSetSuggestion}
-        wrapperRef={wrapperRef}
-        handleSearch={handleSearch}
-      />
+      { isAutoCompleteVisible && 
+        <AutoCompleteResults 
+          isMoving={isInsideAutoComplete}
+          setSuggestion={handleSetSuggestion}
+          wrapperRef={wrapperRef}
+        />
+      }
     </Wrapper>
     
  )
@@ -161,7 +182,8 @@ function mapStateToProps(state){
   }
 }
 
-export default connect(
+export default withRouter(
+  connect(
   mapStateToProps, 
   { getSuggestions, getResults }
-)(SearchBar);
+)(SearchBar));

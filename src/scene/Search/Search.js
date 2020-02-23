@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import SearchBar from "./shared-components/SearchBar/SearchBar";
+import SearchBar from "../shared-components/SearchBar/SearchBar";
 
 const Header = styled.div`
   display: flex;
@@ -25,8 +25,7 @@ const SearchWrapper = styled.div`
 `;
 
 function Search(props) {
-  console.log(props)
-  return(
+  return (
     <Header>
       <Title>React Issue Search</Title>
       <SearchWrapper>

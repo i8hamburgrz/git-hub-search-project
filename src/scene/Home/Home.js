@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import SearchBar from "./shared-components/SearchBar/SearchBar";
+import SearchBar from "../shared-components/SearchBar/SearchBar";
 
 const Wrapper = styled.div`
   display: flex;

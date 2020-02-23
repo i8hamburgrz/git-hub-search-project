@@ -1,7 +1,7 @@
 import React, { Component} from "react";
 import {hot} from "react-hot-loader";
-import Home from "./Home";
-import Search from "./Search";
+import Home from "./Home/Home";
+import Search from "./Search/Search";
 import {
   BrowserRouter as Router,
   Switch,

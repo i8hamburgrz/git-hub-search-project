@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
+import { withRouter } from 'react-router';
 import styled from "styled-components";
 import Labels from "./Labels";
 
@@ -44,7 +45,7 @@ const Item = styled.div`
 `;
 
 function AutoCompleteResults(props) {
-  const [isHidden, setHidden] = useState(false);
+  const [isHidden, setHidden] = useState(true);
   const [pos, setNavigate] = useState(-1);
   const layoutRef = useRef({
     pos: -1,
@@ -55,8 +56,7 @@ function AutoCompleteResults(props) {
     isMoving, 
     setSuggestion, 
     wrapperRef,
-    isError,
-    handleSearch
+    isError
    } = props;
 
   // reference of previous position and props
@@ -84,17 +84,29 @@ function AutoCompleteResults(props) {
   useEffect(() => {
     window.addEventListener('click', handleHideSuggestions);
     window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener('keydown', handleSearchOnEnter);
     return () => {
       window.removeEventListener('click', handleHideSuggestions);
       window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('keydown', handleSearchOnEnter);
     };
-  }, [handleKeyPress]);
+  }, [handleKeyPress, handleHideSuggestions, handleSearchOnEnter]);
 
 
   const handleHideSuggestions = (e) => {
     const { current } = wrapperRef;
     if(current && !current.contains(e.target)) {
       setHidden(true);
+    }
+  }
+
+  const handleSearchOnEnter = (e) => {
+    if(e && e.keyCode === 13 ) {
+      const { current } = layoutRef;
+      const { suggestions, pos } = current;
+      let query = suggestions[pos].title;
+      // query = query.split(' ').join('+');
+      onSearch(query);
     }
   }
 
@@ -120,12 +132,19 @@ function AutoCompleteResults(props) {
 
   const onClickSearch = (query) => {
     setSuggestion(query);
-    handleSearch();
+    setHidden(true);
+    // handleSearch();
+    onSearch(query);
+  }
+
+  const onSearch = (query) => {
+      setSuggestion(query);
+      setHidden(true);
+      props.history.push(`/search?q=${query}`)
   }
 
   if (
-      !suggestions 
-      || suggestions.length === 0 
+      suggestions.length === 0 
       || isHidden 
       || isError
     ) {
@@ -171,7 +190,8 @@ function mapStateToProps(state){
   }
 }
 
-export default connect(
+export default withRouter(
+  connect(
   mapStateToProps, 
   {  }
-)(AutoCompleteResults);
+)(AutoCompleteResults));

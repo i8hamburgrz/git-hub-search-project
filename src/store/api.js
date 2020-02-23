@@ -8,7 +8,6 @@ export const searchSuggestions = (query) => {
 }
 
 export const searchIssues = (query) => {
-  query  = query.split(' ').join('+');
   const url = `https://api.github.com/search/issues?q=${query}+in:react+user:facebook`;
   return request(url)
 }

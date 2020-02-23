@@ -34,7 +34,8 @@ function results(state = initialState, action) {
     case TOGGLE_ERROR: 
       return {
         ...state,
-        apiError: true
+        apiError: true,
+        loadingResults: false
       }
     default:
       return state;
