@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import Labels from "./Labels";
 
 const Container = styled.div`
   width: 100%;
@@ -26,6 +27,8 @@ const Item = styled.div`
   box-sizing: border-box;
   cursor: pointer;
   color: #000;
+  max-height: 267px;
+  overflow-y: auto;
 
   &:hover, &:focus {
     background: #f6f8fa;
@@ -113,17 +116,16 @@ function AutoCompleteResults(props) {
     return false;
   }
 
-
-  // TODO: add labels
   return (
     <Container>
       {
-        suggestions.map((result, i) => 
+        suggestions.map((suggestion, i) => 
           <Item 
             key={i}
             isActive={pos === i}
             >
-              {result.title}
+              {suggestion.title}
+              <Labels allLabels={suggestion.labels} />
           </Item>
         )
       }

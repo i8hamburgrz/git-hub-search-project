@@ -8,9 +8,14 @@ const Wrapper = styled.div`
   flex-direction: column;
   height: 100%;
   max-width: 1200px;
-  margin: 0 auto;
-  justify-content: center;
-  min-height: 350px;
+  margin: 30px auto 0;
+  justify-content: flex-start;
+  min-height: 400px;
+
+  @media (min-width: 767px) {
+    margin-top: 0;
+    justify-content: center;
+  }
 `
 const Title = styled.h1`
   font-size: 30px;

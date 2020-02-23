@@ -9,7 +9,8 @@ const Wrapper = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  width: 584px;
+  max-width: 599px;
+  width: calc(100% - 15px);
   border: 1px solid #dfe1e5;
   margin: 0 auto;
   box-shadow: ${props => (props.isFocus ?
