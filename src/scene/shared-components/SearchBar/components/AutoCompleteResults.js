@@ -55,7 +55,8 @@ function AutoCompleteResults(props) {
     isMoving, 
     setSuggestion, 
     wrapperRef,
-    isError
+    isError,
+    handleSearch
    } = props;
 
   // reference of previous position and props
@@ -117,6 +118,10 @@ function AutoCompleteResults(props) {
     }
   }
 
+  const onClickSearch = (query) => {
+    setSuggestion(query);
+    handleSearch();
+  }
 
   if (
       !suggestions 
@@ -134,6 +139,7 @@ function AutoCompleteResults(props) {
           <Item 
             key={i}
             isActive={pos === i}
+            onClick={() => onClickSearch(suggestion.title)}
             >
               {suggestion.title}
               <Labels allLabels={suggestion.labels} />

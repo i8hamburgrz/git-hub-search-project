@@ -1,6 +1,7 @@
 import { 
   ADD_SUGGESTIONS, 
   REMOVE_SUGGESTIONS,
+  ADD_RESULTS,
   TOGGLE_ERROR
 } from "./searchActions";
 
@@ -22,6 +23,12 @@ function results(state = initialState, action) {
       return {
         ...state,
         suggestions: {},
+        apiError: false
+      }
+    case ADD_RESULTS: 
+      return {
+        ...state,
+        results: action.results,
         apiError: false
       }
     case TOGGLE_ERROR: 

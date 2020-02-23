@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import { getSuggestions } from "../store/searchActions";
+import { getSuggestions, getResults } from "../../../store/searchActions";
 import styled from "styled-components";
-import AutoCompleteResults from "./AutoCompleteResults";
-import SearchIcon from "../images/search.svg";
+import AutoCompleteResults from "./components/AutoCompleteResults";
+import SearchIcon from "../../../images/search.svg";
 
 const Wrapper = styled.div`
   overflow: hidden;
@@ -22,6 +22,7 @@ const Wrapper = styled.div`
   )};
   border-radius: 24px;
   transition: box-shadow 0.1s ease-in;
+  background: #fff;
 `;
 const Search = styled.div`
   overflow: hidden;
@@ -53,6 +54,13 @@ function SearchBar(props) {
   const [query, setQuery] = useState('');
   const [displayValue, setDisplay] = useState('');
   const [isInsideAutoComplete, setIsMoving] = useState(false);
+  const layoutRef = useRef({
+    query: displayValue
+  });
+
+  layoutRef.current = {
+    query: displayValue
+  };
 
   // make api call to github after string is set to state
   useEffect(() => {
@@ -66,6 +74,23 @@ function SearchBar(props) {
       clearTimeout(timeout);
     }
   }, [query]);
+
+  // add event listener
+  useEffect(() => {
+    window.addEventListener('keydown', handleSearch);
+    return () => {
+      window.removeEventListener('keydown', handleSearch);
+    };
+  }, [handleSearch]);
+
+  const handleSearch = (e) => {
+    if(e && e.keyCode === 13) {
+      const { getResults } = props;
+      const { current } = layoutRef;
+
+      getResults(current.query);
+    }
+  }
   
   const onFocusHandler = () => {
     if(!isFocus) {
@@ -119,6 +144,7 @@ function SearchBar(props) {
         isMoving={isInsideAutoComplete}
         setSuggestion={handleSetSuggestion}
         wrapperRef={wrapperRef}
+        handleSearch={handleSearch}
       />
     </Wrapper>
     
@@ -137,5 +163,5 @@ function mapStateToProps(state){
 
 export default connect(
   mapStateToProps, 
-  { getSuggestions }
+  { getSuggestions, getResults }
 )(SearchBar);

@@ -14,6 +14,8 @@ const Label = styled.div`
   font-size: 12px;
   font-family: 'Anonymous Pro', sans-serif;
   margin: 3px 3px 0 0;
+  display: flex;
+  align-items: center;
 `
 // gets the text color based on background contrast
 function getTextColor(hexcolor){

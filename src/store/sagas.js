@@ -1,18 +1,20 @@
-import { fork, takeLatest, put, call } from 'redux-saga/effects'
+import { all, takeLatest, takeEvery, put, call } from 'redux-saga/effects'
 import { 
-  GET_SUGGESTIONS, 
+  GET_SUGGESTIONS,
+  GET_RESULTS,
   addSuggestions, 
   removeSuggestions, 
+  addResults,
   setError 
 } from "../store/searchActions";
-import { searchSuggestions } from "../store/api";
+import { searchSuggestions, searchIssues } from "../store/api";
 
-// Generator
+// Generators
 function* fetchSuggestions(action) {
   try {
     const { payload } = action;
     if (payload.length > 0) {
-      const response = yield call(searchSuggestions, action.payload);
+      const response = yield call(searchSuggestions, payload);
 
       response.error
         ? yield put(setError())
@@ -26,17 +28,25 @@ function* fetchSuggestions(action) {
   }
 }
 
-// watcher
-function* watchFetchData() {
+function* fetchResults(action) {
   try {
-    yield takeLatest(GET_SUGGESTIONS, fetchSuggestions);
-  } catch(e){
-    console.log(e)
+    debugger
+    const { payload } = action;
+    const response = yield call(searchIssues, payload);
+
+      response.error
+        ? yield put(setError())
+        : yield put(addResults(response));
+    
+  } catch(e) {
+      console.log(e);
   }
-  
 }
 
 // root
 export default function* rootSaga() {
-  yield fork(watchFetchData)
+  yield all([
+    yield takeEvery(GET_RESULTS, fetchResults),
+    yield takeLatest(GET_SUGGESTIONS, fetchSuggestions)
+  ])
 }
