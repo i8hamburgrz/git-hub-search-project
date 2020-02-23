@@ -57,7 +57,7 @@ function SearchBar(props) {
     // this will help reduce the amount of unnecessary api calls being made
     const timeout = setTimeout(()=> {
       searchGitHub(query)
-    }, 500);
+    }, 300);
   
     return () => {
       clearTimeout(timeout);
