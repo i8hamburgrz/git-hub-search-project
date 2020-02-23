@@ -1,8 +1,13 @@
-import { ADD_SUGGESTIONS, REMOVE_SUGGESTIONS } from "./searchActions";
+import { 
+  ADD_SUGGESTIONS, 
+  REMOVE_SUGGESTIONS,
+  TOGGLE_ERROR
+} from "./searchActions";
 
 const initialState = { 
   suggestions: {},
-  results: {}
+  results: {},
+  apiError: false
 };
 
 function results(state = initialState, action) {
@@ -11,11 +16,18 @@ function results(state = initialState, action) {
       return {
         ...state,
         suggestions: action.suggestions,
+        apiError: false
       }
     case REMOVE_SUGGESTIONS:
       return {
         ...state,
-        suggestions: {}
+        suggestions: {},
+        apiError: false
+      }
+    case TOGGLE_ERROR: 
+      return {
+        ...state,
+        apiError: true
       }
     default:
       return state;

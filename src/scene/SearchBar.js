@@ -11,7 +11,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   max-width: 599px;
   width: calc(100% - 15px);
-  border: 1px solid #dfe1e5;
+  border: ${props => (props.isError 
+    ? `1px solid red`
+    : `1px solid #dfe1e5`
+  )};
   margin: 0 auto;
   box-shadow: ${props => (props.isFocus ?
     `0px 1px 3px 1px rgba(0,0,0,0.1)`
@@ -98,7 +101,8 @@ function SearchBar(props) {
   return (
     <Wrapper
       ref={wrapperRef}
-      isFocus={isFocus}>
+      isFocus={isFocus}
+      isError={props.isError}>
       <Search>
         <Icon><img src={SearchIcon} /></Icon>
         <InputField 
@@ -122,10 +126,11 @@ function SearchBar(props) {
 }
 
 function mapStateToProps(state){
-  const { suggestions } = state;
+  const { suggestions, apiError } = state;
   const { items } = suggestions;
 
   return {
+    isError: apiError,
     hasResults: items && items.length > 0
   }
 }

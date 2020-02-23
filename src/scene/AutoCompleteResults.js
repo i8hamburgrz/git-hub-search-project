@@ -8,6 +8,8 @@ const Container = styled.div`
   padding: 10px;
   box-sizing: border-box;
   position: relative;
+  max-height: 267px;
+  overflow-y: auto;
 
   ::before {
     content: "";
@@ -27,8 +29,6 @@ const Item = styled.div`
   box-sizing: border-box;
   cursor: pointer;
   color: #000;
-  max-height: 267px;
-  overflow-y: auto;
 
   &:hover, &:focus {
     background: #f6f8fa;
@@ -50,7 +50,13 @@ function AutoCompleteResults(props) {
     pos: -1,
     isMoving
   });
-  const { suggestions, isMoving, setSuggestion, wrapperRef } = props;
+  const { 
+    suggestions, 
+    isMoving, 
+    setSuggestion, 
+    wrapperRef,
+    isError
+   } = props;
 
   // reference of previous position and props
   layoutRef.current = {
@@ -112,7 +118,12 @@ function AutoCompleteResults(props) {
   }
 
 
-  if (!suggestions || suggestions.length === 0 || isHidden) {
+  if (
+      !suggestions 
+      || suggestions.length === 0 
+      || isHidden 
+      || isError
+    ) {
     return false;
   }
 
@@ -135,7 +146,7 @@ function AutoCompleteResults(props) {
 }
 
 function mapStateToProps(state){
-  const { suggestions } = state;
+  const { suggestions, apiError } = state;
   const { items } = suggestions;
   let _suggestions = items ? Object.values(items) : [];
 
@@ -149,6 +160,7 @@ function mapStateToProps(state){
   }
 
   return {
+    isError: apiError,
     suggestions: _suggestions
   }
 }

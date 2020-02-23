@@ -1,5 +1,10 @@
 import { fork, takeLatest, put, call } from 'redux-saga/effects'
-import { GET_SUGGESTIONS, addSuggestions, removeSuggestions } from "../store/searchActions";
+import { 
+  GET_SUGGESTIONS, 
+  addSuggestions, 
+  removeSuggestions, 
+  setError 
+} from "../store/searchActions";
 import { searchSuggestions } from "../store/api";
 
 // Generator
@@ -7,8 +12,11 @@ function* fetchSuggestions(action) {
   try {
     const { payload } = action;
     if (payload.length > 0) {
-      const data = yield call(searchSuggestions, action.payload);
-      yield put(addSuggestions(data))
+      const response = yield call(searchSuggestions, action.payload);
+
+      response.error
+        ? yield put(setError())
+        : yield put(addSuggestions(response));
     } else {
       yield put(removeSuggestions());
     }
@@ -20,7 +28,12 @@ function* fetchSuggestions(action) {
 
 // watcher
 function* watchFetchData() {
-  yield takeLatest(GET_SUGGESTIONS, fetchSuggestions);
+  try {
+    yield takeLatest(GET_SUGGESTIONS, fetchSuggestions);
+  } catch(e){
+    console.log(e)
+  }
+  
 }
 
 // root
