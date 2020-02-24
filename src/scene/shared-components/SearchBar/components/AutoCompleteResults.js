@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
+import { compose } from "redux";
 import { withRouter } from "react-router";
 import styled from "styled-components";
 import Labels from "../../labels/Labels";
@@ -180,8 +181,10 @@ function mapStateToProps(state){
   }
 }
 
-export default withRouter(
+export default compose(
+  withRouter,
   connect(
-  mapStateToProps, 
-  {  }
-)(AutoCompleteResults));
+    mapStateToProps, 
+    { }
+  )
+)(AutoCompleteResults)

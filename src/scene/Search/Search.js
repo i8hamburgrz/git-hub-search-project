@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { compose } from "redux";
 import { withRouter } from "react-router";
 import queryString from "query-string";
 import styled from "styled-components";
@@ -60,7 +61,10 @@ function mapStateToProps(state) {
   }
 }
 
-export default withRouter(
+
+
+export default compose(
+  withRouter,
   connect(
   mapStateToProps, 
   { getResults }

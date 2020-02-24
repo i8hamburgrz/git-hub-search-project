@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
+import { compose } from "redux";
 import queryString from "query-string";
 import { getSuggestions } from "../../../store/actions/searchActions";
 import styled from "styled-components";
@@ -187,8 +188,10 @@ function mapStateToProps(state){
   }
 }
 
-export default withRouter(
+export default compose(
+  withRouter,
   connect(
-  mapStateToProps, 
-  { getSuggestions }
-)(SearchBar));
+    mapStateToProps, 
+    { getSuggestions }
+  )
+)(SearchBar)
