@@ -1,6 +1,6 @@
 # Search/Autocomplete Project
 
-This is a search project. As a user types, a box will provide the top 5 most relevant suggestions. The user can scroll through to auto complete their search. 
+This is a search project. As a user types, a box will provide the top 5 most relevant suggestions. The user can scroll through to autocomplete their search. 
 
 Some Features include:
 * Consumes the search endpoint from GitHub's developer api to query for search words. 
