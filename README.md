@@ -14,11 +14,11 @@ Some Features include:
 * Clone package
 * Inside project folder, run:
 
-```npm install
-```
+`npm install`
+
 then
-```npm start
-```
+
+`npm start`
 
 The App should start in a new browser window!
 
