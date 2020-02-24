@@ -2,13 +2,15 @@ import {
   ADD_SUGGESTIONS, 
   REMOVE_SUGGESTIONS,
   ADD_RESULTS,
-  TOGGLE_ERROR
+  TOGGLE_ERROR,
+  GET_RESULTS
 } from "./searchActions";
 
 const initialState = { 
   suggestions: {},
   results: {},
-  apiError: false
+  apiError: false,
+  loadingResults: false
 };
 
 function results(state = initialState, action) {
@@ -22,9 +24,14 @@ function results(state = initialState, action) {
     case REMOVE_SUGGESTIONS:
       return {
         ...state,
-        suggestions: {},
-        apiError: false
+        suggestions: {}
       }
+    case GET_RESULTS: {
+      return {
+        ...state,
+        loadingResults: true
+      }
+    }
     case ADD_RESULTS: 
       return {
         ...state,

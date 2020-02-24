@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import { withRouter } from 'react-router';
+import { withRouter } from "react-router";
 import styled from "styled-components";
-import Labels from "./Labels";
+import Labels from "../../Labels";
 
 const Container = styled.div`
   width: 100%;
@@ -76,6 +76,7 @@ function AutoCompleteResults(props) {
 
   // reset navigation && unhide if suggestions array changes
   useEffect(() => {
+    console.log(suggestions)
     setNavigate(-1);
     setHidden(false);
   }, [suggestions]);
@@ -104,13 +105,13 @@ function AutoCompleteResults(props) {
     if(e && e.keyCode === 13 ) {
       const { current } = layoutRef;
       const { suggestions, pos } = current;
-      let query = suggestions[pos].title;
-      // query = query.split(' ').join('+');
+      const query = suggestions[pos].title;
       onSearch(query);
     }
   }
 
   const handleKeyPress = (e) => {
+    // using the ref, navigate up and down list
     const { current } = layoutRef;
     const { suggestions, isMoving, pos } = current;
     const isDownKeyPress = e.keyCode === 40;
@@ -133,18 +134,17 @@ function AutoCompleteResults(props) {
   const onClickSearch = (query) => {
     setSuggestion(query);
     setHidden(true);
-    // handleSearch();
     onSearch(query);
   }
 
   const onSearch = (query) => {
-      setSuggestion(query);
       setHidden(true);
+      query = query.split(' ').join('+');
       props.history.push(`/search?q=${query}`)
   }
 
   if (
-      suggestions.length === 0 
+      suggestions.length === 0
       || isHidden 
       || isError
     ) {
@@ -171,22 +171,13 @@ function AutoCompleteResults(props) {
 }
 
 function mapStateToProps(state){
-  const { suggestions, apiError } = state;
+  let { suggestions, apiError } = state;
   const { items } = suggestions;
-  let _suggestions = items ? Object.values(items) : [];
-
-  if (_suggestions.length > 0) {
-    _suggestions = _suggestions.map((item) => {
-      return {
-        labels: item.labels,
-        title: item.title,
-      }
-    })
-  }
+  suggestions = items ? Object.values(items) : [];
 
   return {
     isError: apiError,
-    suggestions: _suggestions
+    suggestions
   }
 }
 

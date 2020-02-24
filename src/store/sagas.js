@@ -36,7 +36,9 @@ function* fetchResults(action) {
       response.error
         ? yield put(setError())
         : yield put(addResults(response));
-    
+
+      // remove suggestion once results are loaded
+      yield put(removeSuggestions());
   } catch(e) {
       console.log(e);
   }

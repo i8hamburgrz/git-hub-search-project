@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { withRouter } from 'react-router';
 import { connect } from "react-redux";
 import queryString from "query-string";
-import { getSuggestions, getResults } from "../../../store/searchActions";
+import { getSuggestions } from "../../../store/searchActions";
 import styled from "styled-components";
 import AutoCompleteResults from "./components/AutoCompleteResults";
 import SearchIcon from "../../../images/search.svg";
@@ -58,23 +58,22 @@ function SearchBar(props) {
   const [isAutoCompleteVisible, setACVisibilty] = useState(false);
   const [isInsideAutoComplete, setIsMoving] = useState(false);
   const layoutRef = useRef({
-    query: displayValue
+    queryRef: displayValue,
+    isMounted: false
   });
 
-  // needs this as a reference for event handlers
-  layoutRef.current = {
-    query: displayValue
-  };
+  // we need to assign the display value here so listeners get the
+  // most up to date value from state.
+  layoutRef.current.queryRef = displayValue;
 
-  // on mount, check if we are on search page
+  // on mount, check if we are on search page and set display value
   useEffect(() => {
-    const { location, getResults } = props;
+    const { location } = props;
 
     if (location.pathname.includes('search')) {
       if(location.search.length > 0) {
         const query = queryString.parse(location.search);
         setDisplay(query.q);
-        getResults(query.q);
       }
     }
     
@@ -82,16 +81,20 @@ function SearchBar(props) {
 
   // make api call to github after string is set to state
   useEffect(() => {
-    // using timeout here to wait to make api until user stops typing
+    let timeout;
+    const { current } = layoutRef;
+    // using timeout here to wait to until user stops typing
     // this will help reduce the amount of unnecessary api calls being made
-    const timeout = setTimeout(()=> {
-      searchGitHub(query)
-    }, 300);
+    // should only be called on componentDidUpdate lifecycle
+    if(current.isMounted) {
+      timeout = setTimeout(()=> {
+        searchGitHub(query)
+      }, 300);
+    }
     
-  
     return () => {
       clearTimeout(timeout);
-      layoutRef.current.isMounted = true;
+      current.isMounted = true;
     }
   }, [query]);
 
@@ -106,8 +109,9 @@ function SearchBar(props) {
   const handleSearchOnEnter = (e) => {
     if(e && e.keyCode === 13 && !isInsideAutoComplete) {
       const { current } = layoutRef;
-      const query = current.query.split(' ').join('+');
-      props.history.push(`/search?q=${query}`)
+      let { queryRef } = current;
+      queryRef = queryRef.split(' ').join('+');
+      props.history.push(`/search?q=${queryRef}`)
     }
   }
   
@@ -185,5 +189,5 @@ function mapStateToProps(state){
 export default withRouter(
   connect(
   mapStateToProps, 
-  { getSuggestions, getResults }
+  { getSuggestions }
 )(SearchBar));

@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import queryString from "query-string";
 import styled from "styled-components";
 import SearchBar from "../shared-components/SearchBar/SearchBar";
+import { getResults } from "../../store/searchActions";
+import Results from "./components/Results";
 
 const Header = styled.div`
   display: flex;
   flex-direction: row;
-  position: absolute;
   width: 100%;
   padding: 15px;
   box-sizing: border-box;
   justify-content: flex-start;
-  border-bottom: 1px solid #dfe1e5
+  border-bottom: 1px solid #dfe1e5;
 `
 const Title = styled.h1`
   margin: 0;
@@ -24,16 +28,41 @@ const SearchWrapper = styled.div`
   left: 160px;
 `;
 
+
 function Search(props) {
+
+  // get results when search params change
+  useEffect(() => {
+    const urlParam = queryString.parse(props.history.location.search);
+    props.getResults(urlParam.q);
+  }, [props.history.location.search])
+
   return (
-    <Header>
+    <React.Fragment>
+      <Header>
       <Title>React Issue Search</Title>
       <SearchWrapper>
         <SearchBar />
       </SearchWrapper>
-      
     </Header>
+    <Results results={props.results} />
+    </React.Fragment>
   )
 }
 
-export default Search;
+function mapStateToProps(state) {
+  let { results } = state;
+  const { items } = results;
+  results = items ? Object.values(items) : [];
+
+  return {
+    results,
+    isLoading: state.loadingResults
+  }
+}
+
+export default withRouter(
+  connect(
+  mapStateToProps, 
+  { getResults }
+)(Search));
