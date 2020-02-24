@@ -61,11 +61,10 @@ function mapStateToProps(state) {
   }
 }
 
-
-
 export default compose(
   withRouter,
   connect(
-  mapStateToProps, 
-  { getResults }
-)(Search));
+    mapStateToProps, 
+    { getResults }
+  )
+)(Search);
