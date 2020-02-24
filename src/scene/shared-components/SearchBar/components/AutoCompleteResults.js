@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import styled from "styled-components";
-import Labels from "../../Labels";
+import Labels from "../../labels/Labels";
 
 const Container = styled.div`
   width: 100%;
@@ -74,9 +74,8 @@ function AutoCompleteResults(props) {
     }
   }, [pos]);
 
-  // reset navigation && unhide if suggestions array changes
+  // make visible suggestions and reset active state position
   useEffect(() => {
-    console.log(suggestions)
     setNavigate(-1);
     setHidden(false);
   }, [suggestions]);
@@ -111,7 +110,7 @@ function AutoCompleteResults(props) {
   }
 
   const handleKeyPress = (e) => {
-    // using the ref, navigate up and down list
+    // using the layoutRef, navigate up and down list
     const { current } = layoutRef;
     const { suggestions, isMoving, pos } = current;
     const isDownKeyPress = e.keyCode === 40;

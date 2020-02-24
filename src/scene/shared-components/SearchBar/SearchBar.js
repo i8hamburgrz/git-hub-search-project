@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { withRouter } from 'react-router';
+import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import queryString from "query-string";
-import { getSuggestions } from "../../../store/searchActions";
+import { getSuggestions } from "../../../store/actions/searchActions";
 import styled from "styled-components";
 import AutoCompleteResults from "./components/AutoCompleteResults";
 import SearchIcon from "../../../images/search.svg";
@@ -66,7 +66,8 @@ function SearchBar(props) {
   // most up to date value from state.
   layoutRef.current.queryRef = displayValue;
 
-  // on mount, check if we are on search page and set display value
+  // on mount, check if we are on search page and use the 
+  // url query param to set the display value
   useEffect(() => {
     const { location } = props;
 
@@ -83,7 +84,7 @@ function SearchBar(props) {
   useEffect(() => {
     let timeout;
     const { current } = layoutRef;
-    // using timeout here to wait to until user stops typing
+    // using timeout here to wait until user stops typing
     // this will help reduce the amount of unnecessary api calls being made
     // should only be called on componentDidUpdate lifecycle
     if(current.isMounted) {

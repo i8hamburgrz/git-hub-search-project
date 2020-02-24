@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import Labels from "../../shared-components/Labels";
+import moment from  "moment"
+import Labels from "../../shared-components/labels/Labels";
+import results from "../../../store/reducers/resultsReducer";
 
 const ResultsWrap = styled.div`
   width: 100%;
@@ -49,6 +51,9 @@ function Results(props) {
             <li><b>Author</b>: {result.user.login}</li>
             <li><b>Comments</b>: {result.comments}</li>
             <li><b>State</b>: {result.state}</li>
+            <li><b>Last Updated: </b> 
+              {moment(results.updated_at).format("MMM DD, YYYY")}
+            </li>
           </Details>
       </Item>
       ))}

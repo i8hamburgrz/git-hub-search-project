@@ -6,8 +6,8 @@ import {
   removeSuggestions, 
   addResults,
   setError 
-} from "../store/searchActions";
-import { searchSuggestions, searchIssues } from "../store/api";
+} from "../actions/searchActions";
+import { searchSuggestions, searchIssues } from "../actions/api";
 
 // Generators
 function* fetchSuggestions(action) {

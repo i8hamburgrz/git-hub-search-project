@@ -4,7 +4,7 @@ import {
   ADD_RESULTS,
   TOGGLE_ERROR,
   GET_RESULTS
-} from "./searchActions";
+} from "../actions/searchActions";
 
 const initialState = { 
   suggestions: {},

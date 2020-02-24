@@ -2,8 +2,8 @@ import { createStore } from "redux";
 import { applyMiddleware, compose } from "redux";
 import 'regenerator-runtime/runtime';
 import createSagaMiddleware from "redux-saga";
-import reducers from "../store/resultsReducer";
-import rootSaga from "../store/sagas";
+import reducers from "./reducers/resultsReducer";
+import rootSaga from "./sagas/sagas";
 
 export default function configureStore() {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

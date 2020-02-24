@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import queryString from "query-string";
 import styled from "styled-components";
 import SearchBar from "../shared-components/SearchBar/SearchBar";
-import { getResults } from "../../store/searchActions";
+import { getResults } from "../../store/actions/searchActions";
 import Results from "./components/Results";
 
 const Header = styled.div`
@@ -27,7 +27,6 @@ const SearchWrapper = styled.div`
   position: absolute;
   left: 160px;
 `;
-
 
 function Search(props) {
 
