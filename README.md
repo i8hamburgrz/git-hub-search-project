@@ -4,10 +4,10 @@ This is a search project. As a user types, a box will provide the top 5 most rel
 
 Some Features include:
 * Consumes the search endpoint from GitHub's developer api to query for search words. 
-* searches through React's issues
-* Display 5 suggestion a user can choose as they type their search
-* Displays tags associated witih each suggestions
-* A search results page that includes links to issues and information on author, last update, comments, and state.
+* Searches through React's issues
+* Display 5 suggestions a user can choose from as they type their search
+* Displays tags associated witih each suggestion
+* A search results page that includes links to each issue and information on the issue's author, last update, comments, and state.
 
 ## Installation
 
