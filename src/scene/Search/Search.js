@@ -30,6 +30,7 @@ const SearchWrapper = styled.div`
 `;
 
 function Search(props) {
+  const { results, isLoading } = props;
 
   // get results when search params change
   useEffect(() => {
@@ -45,7 +46,7 @@ function Search(props) {
         <SearchBar />
       </SearchWrapper>
     </Header>
-    <Results results={props.results} />
+    <Results results={results} isLoading={isLoading} />
     </React.Fragment>
   )
 }

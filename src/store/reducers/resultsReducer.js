@@ -36,6 +36,7 @@ function results(state = initialState, action) {
       return {
         ...state,
         results: action.results,
+        loadingResults: false,
         apiError: false
       }
     case TOGGLE_ERROR: 

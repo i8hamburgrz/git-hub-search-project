@@ -37,11 +37,38 @@ const Details = styled.ul`
     color: #70757a;
   }
 `
+const Loading = styled.div`
+  width: 50px;
+  height: 50px;
+  border-top: 3px solid rgba(0, 0, 0, 0.5);
+  border-right: 3px solid transparent;
+  border-radius: 50%;
+  animation: rotation .8s linear infinite;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  margin: -25px 0 0 -25px;
+
+  @keyframes rotation{
+    from{
+      transform: rotate(0deg);
+    }
+    to{
+      transform: rotate(360deg);
+    }
+  }
+`
 
 function Results(props) {
+  const { isLoading, results } = props;
+
+  if (isLoading) {
+    return <Loading></Loading>
+  }
+
   return (
     <ResultsWrap>
-      { props.results.map(result => (
+      { results.map(result => (
         <Item key={result.id}>
           <Title href={result.url}>
             {result.title}

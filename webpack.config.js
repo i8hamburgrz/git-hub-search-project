@@ -38,6 +38,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
+      title: 'GitHub React Issue Search :: By Steven Brand',
       template: "./src/index.html",
       filename: "./index.html"
     }),
